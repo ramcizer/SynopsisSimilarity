@@ -7,6 +7,18 @@ nlp = spacy.load('en_core_web_md')
 # It is also cast as nlp to ready for a spacy comparison
 hulk_description = nlp("Will he save their world or destroy it? When the Hulk becomes too dangerous for the Earth, the Illuminati trick Hulk into a shuttle and launch him into space to a planet where the Hulk can live in peace. Unfortunately, Hulk land on the planet Sakaar where he is sold into slavery and trained as a gladiator.")
 
+# This function does the main work of pulling in the read items to return a dictionary of similarity scores
+def synopsis_sort():
+
+    # Then there was to create a dictionary so that the most and least similar synopsis can be displayed 
+    # After the initial print above the dictionary, synopsis_similarity_dict is then make ready for additions then sorting.
+    synopsis_similarity_dict = {}
+    for i, x in enumerate(movies):
+        synopsis_similarity_dict.update({x[0:2]: x.similarity(hulk_description)})
+
+
+    return synopsis_similarity_dict
+
 # This print_synopsis function is for some efficiency later on in the program. 
 # The print_synopsis function takes in a variable that is already a dict item. 
 def print_synopsis(synopsis_sorted):
@@ -39,15 +51,14 @@ for i, x in enumerate(movies):
     # synopsis_list = x
     print(f"{x[0:2]}: {x.similarity(hulk_description)}")
 
-# Then there was to create a dictionary so that the most and least similar synopsis can be displayed 
-# After the initial print above the dictionary, synopsis_similarity_dict is then make ready for additions then sorting. 
+# Here the main function gets to work regarding presenting the synopsis dictionary by similarity score. 
+synopsis_sort()
 
-synopsis_similarity_dict = {}
-for i, x in enumerate(movies):
-    synopsis_similarity_dict.update({x[0:2]: x.similarity(hulk_description)})
+synopsis_similarity_dict = synopsis_sort()
 
 # synopsis_similarity_dict is then sorted by items as highest and lowest similarity. _
 # I have already prepared the dictionary so that the items are the scores. 
+# I've tried to define these as a method / function even though won't save on efficiency however it doesn't return a dict.
 synopsis_sim_high = dict(sorted(synopsis_similarity_dict.items(), key=lambda item: item[1], reverse=True))
 synopsis_sim_low = dict(sorted(synopsis_similarity_dict.items(), key=lambda item: item[1]))
 
